@@ -1,7 +1,9 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import Layout from "@/layouts/Layout.astro";
+import bg from '@/assets/bg_home.jpg'; 
+
 ---
 
-<Layout title="Inicio">
+<Layout title="Inicio" bgImage={bg.src} subtitle="Disfruta una Deliciosa Taza de Café">
   <h1 class="text-3xl font-bold underline">Hello world!</h1>
 </Layout>
