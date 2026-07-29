@@ -1,3 +1,26 @@
-<footer>
-    <p>footer</p>
+---
+import FooterBox from "./FooterBox.astro";
+---
+
+<footer class="bg-coffee-900 pt-20">
+  <div class="max-w-7xl mx-auto mt-10 grid grid-cols-1 md:grid-cols-3 gap-5">
+    <FooterBox heading="Ubicación">
+      <p>Coffee Streat 39</p>
+      <p>Londres, UK</p>
+    </FooterBox>
+    <FooterBox heading="Recervación">
+      <p>Tel. 333432-2343</p>
+      <a href="tel:*3234343456">Llamar</a>
+    </FooterBox>
+    <FooterBox heading="Horario">
+      <p>Lun - Jue: 11:00 - 22:00</p>
+      <p>Vie - Sab: 9:00 - 22:00</p>
+      <p>Domingo: cerrado</p>
+    </FooterBox>
+  </div>
+  <p class="py-10 text-ceter text-white text-sm">
+    Todos los derechos reservados. La Cafeteria1939. &copy; {
+      new Date().getFullYear()
+    }
+  </p>
 </footer>
