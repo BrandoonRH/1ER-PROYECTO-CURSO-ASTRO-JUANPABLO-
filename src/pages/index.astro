@@ -1,13 +1,44 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import bg from '@/assets/bg_home.jpg'; 
+import bg from "@/assets/bg_home.jpg";
 
+import CategoryIconLabel from "@/components/ui/CategoryIconLabel.astro";
 ---
 
-<Layout title="Inicio" bgImage={bg.src} subtitle="Disfruta una Deliciosa Taza de Café">
-  <h1>inicio</h1>
-
-  <section slot="after-main-content">
-    Promos
-  </section>
+<Layout
+  title="Inicio"
+  bgImage={bg.src}
+  subtitle="Disfruta una Deliciosa Taza de Café"
+>
+  <h2 class="text-coffee-400 text-center font-black text-lg uppercase after:coffe-icon">
+    Conoce más
+    <span class="block text-4xl text-coffee-900">sobre nosotros</span>
+  </h2>
+  <p class="text-center mt-10 text-lg">
+    Desde 1939, nuestra cafetería ha sido un rincón acogedor donde el buen café
+    y la comida hecha con cariño son protagonistas. Aquí no solo vienes a
+    disfrutar de una bebida: vienes a saborear el resultado de décadas de
+    dedicación, recetas caseras y una selección cuidadosa de ingredientes
+    frescos y de calidad.
+  </p>
+  <p class="text-center mt-10 text-lg">
+    En cada plato y en cada taza encontrarás el equilibrio perfecto entre
+    tradición y sabor. Desde nuestro café artesanal hasta nuestros desayunos,
+    almuerzos y repostería, todo está preparado con productos naturales, sin
+    atajos ni artificios.
+  </p>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+    <CategoryIconLabel
+    icon="icon_coffee.svg"
+    text="Café"
+  />
+   <CategoryIconLabel
+    icon="icon_dessert.svg"
+    text="Postres"
+  />
+   <CategoryIconLabel
+    icon="icon_tea.svg"
+    text="Té"
+  />
+</div>
 </Layout>
