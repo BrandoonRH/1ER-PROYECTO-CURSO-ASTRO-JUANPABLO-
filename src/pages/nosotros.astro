@@ -1,0 +1,15 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { BaseWPSchema } from "../types/index";
+
+const url = `http://coffeeshop.local/wp-json/wp/v2/pages?slug=nosotros`;
+const res = await fetch(url);
+const json = await res.json();
+console.log(json[0])
+const response = BaseWPSchema.safeParse(json[0]);
+console.log(response);
+---
+
+<Layout title="Nosotros" subtitle="Página de NOsotros" bgImage="./hola.pgn">
+  <h1>NOsotros</h1>
+</Layout>
