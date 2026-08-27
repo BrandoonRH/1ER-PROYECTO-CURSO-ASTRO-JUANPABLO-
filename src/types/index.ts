@@ -25,18 +25,38 @@ export const BaseWPSchema = z.object({
   acf: z.object({
     subtitle: z.string(),
   }),
-  feature_images: featuredImagesSchemas
+  feature_images: featuredImagesSchemas,
 });
-
 
 const processSchema = z.object({
   title: z.string(),
   description: z.string(),
-  image: z.string()
-})
+  image: z.string(),
+});
 
 export const ProcessPageSchema = BaseWPSchema.extend({
-  acf: z.object({
-    subtitle: z.string(),
-  }).catchall(processSchema)
+  acf: z
+    .object({
+      subtitle: z.string(),
+    })
+    .catchall(processSchema),
+});
+
+const CategorySchema = z.object({
+  name: z.string(),
+  slug: z.string()
+}); 
+const CategoriesSchema = z.array(CategorySchema)
+
+/***POSTS */
+
+export const PostSchema = BaseWPSchema.omit({
+  acf: true,
+}).extend({
+  date: z.string(),
+  category_details: CategoriesSchema
 })
+
+export type PostType = z.infer<typeof PostSchema>; 
+
+export const PostsSchema = z.array(PostSchema); 
