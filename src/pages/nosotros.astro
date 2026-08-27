@@ -3,7 +3,7 @@ import { Picture } from "astro:assets";
 import Layout from "@/layouts/Layout.astro";
 import { BaseWPSchema } from "../types/index";
 
-const url = `http://coffeeshop.local/wp-json/wp/v2/pages?slug=nosotros`;
+const url = `${import.meta.env.API_URL}/pages?slug=nosotros`;
 const res = await fetch(url);
 const json = await res.json();
 const { data } = BaseWPSchema.safeParse(json[0]);
@@ -22,7 +22,7 @@ if (!data) return null;
       alt="Imagen de la página"
       width={data.feature_images.medium_large.width}
       height={data.feature_images.medium_large.height}
-      formats={['avif', 'webp']}
+      formats={["avif", "webp"]}
     />
     <div
       class="text-xl space-y-3 mt-10 lg:mt-0"
