@@ -9,5 +9,6 @@ export default defineConfig({
   },
   image: {
     domains: ['coffeeshop.local']
-  }
+  },
+  //output: 'static | server' por defecto siempre es static
 });

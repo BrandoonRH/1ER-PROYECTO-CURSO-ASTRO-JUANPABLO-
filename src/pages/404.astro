@@ -1,0 +1,15 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import bgImage404 from "@/assets/bg_404.jpg";
+---
+
+<Layout
+  title="Página no encontrada"
+  subtitle="No se encontro la página que buscas "
+  bgImage={bgImage404.src}
+>
+  <p class="text-center text-lg">
+    Tal vez quieras volver al {" "}
+    <a href="/" class="text-coffee-600 font-extrabold">Inicio</a>
+  </p>
+</Layout>
