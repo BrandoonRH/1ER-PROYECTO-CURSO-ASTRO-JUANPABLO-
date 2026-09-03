@@ -29,6 +29,20 @@ export const BaseWPSchema = z.object({
   feature_images: featuredImagesSchemas,
 });
 
+const gallerySchema = z.object({
+  large: imageSchema,
+  full: imageSchema,
+  medium_large: imageSchema,
+  medium: imageSchema,
+  thumbnail: imageSchema,
+});
+
+export type GalleryType = z.infer<typeof gallerySchema>;
+
+export const GallerySchema = BaseWPSchema.extend({
+  gallery: z.array(gallerySchema),
+});
+
 const processSchema = z.object({
   title: z.string(),
   description: z.string(),
@@ -49,9 +63,11 @@ export const CategorySchema = z.object({
   slug: z.string(),
 });
 
-export const CategoriesSlugSchema = z.array(CategorySchema.pick({
-  slug: true
-}))
+export const CategoriesSlugSchema = z.array(
+  CategorySchema.pick({
+    slug: true,
+  }),
+);
 
 const CategoriesSchema = z.array(CategorySchema);
 
