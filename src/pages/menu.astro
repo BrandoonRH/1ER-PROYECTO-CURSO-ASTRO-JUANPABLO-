@@ -1,0 +1,35 @@
+---
+import { Picture } from "astro:assets";
+import Layout from "@/layouts/Layout.astro";
+import { BaseWPSchema } from "../types/index";
+import ProductsMenu from "@/components/menu/ProductsMenu.astro";
+
+const url = `${import.meta.env.API_URL}/pages?slug=menu`;
+const res = await fetch(url);
+const json = await res.json();
+const { data } = BaseWPSchema.safeParse(json[0]);
+
+if (!data) return null;
+---
+
+<Layout
+  title={data.title.rendered || "Titulo"}
+  subtitle={data.acf.subtitle || "Subtitulo"}
+  bgImage={data.feature_images.full.url || "."}
+>
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+    <Picture
+      src={data.feature_images.medium_large.url}
+      alt="Imagen de la página"
+      width={data.feature_images.medium_large.width}
+      height={data.feature_images.medium_large.height}
+      formats={["avif", "webp"]}
+    />
+    <div
+      class="text-xl space-y-3 mt-10 lg:mt-0"
+      set:html={data.content.rendered}
+    />
+  </div>
+
+  <ProductsMenu slot="after-main-content" />
+</Layout>

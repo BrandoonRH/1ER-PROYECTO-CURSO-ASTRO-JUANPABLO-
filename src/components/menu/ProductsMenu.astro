@@ -1,0 +1,20 @@
+---
+import CoffeeMenu from "./CoffeeMenu.astro";
+import FoodMenu from "./FoodMenu.astro";
+---
+
+<section class="bg-coffee-800 py-10 -mt-20">
+  <div
+    class="max-w-7xl mx-auto bg-menu-image bg-no-repeat bg-position-[center_80px] bg-contain pt-37.5 lg:pt-62.5 pb-40"
+  >
+    <h3 class="text-white font-black text-center text-xl pb-4 uppercase">
+      Nuestro Delicioso
+      <span class="text-4xl block">Menú</span>
+    </h3>
+
+    <div class="grid grid-cols-1 2xl:grid-cols-2 gap-5 mt-10">
+      <CoffeeMenu />
+      <FoodMenu />
+    </div>
+  </div>
+</section>

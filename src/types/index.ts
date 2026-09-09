@@ -81,5 +81,18 @@ export const PostSchema = BaseWPSchema.omit({
 });
 
 export type PostType = z.infer<typeof PostSchema>;
+export type FeatureImages = z.infer<typeof featuredImagesSchemas>;
 
 export const PostsSchema = z.array(PostSchema);
+
+const MenuItemSchema = BaseWPSchema.pick({
+  title: true,
+  feature_images: true,
+}).extend({
+  acf: z.object({
+    description: z.string(),
+    price: z.coerce.number(),
+  }),
+});
+
+export const MenuItemsSchema = z.array(MenuItemSchema);
