@@ -1,0 +1,91 @@
+---
+// 🖥️ TODO este bloque (el "frontmatter") corre SOLO en el servidor
+// (o en el build, si la página es estática). Nada de esto llega al navegador.
+import type { Location } from "@/types";
+
+interface Props {
+  location: Location;
+}
+
+// Recibimos el prop "location" que nos llegó desde el componente padre.
+const { location } = Astro.props as Props;
+
+// 👀 Este console.log se ve en la TERMINAL donde corre "npm run dev" / el build,
+// NUNCA en la consola del navegador, porque este código nunca se envía al cliente.
+//console.log(location);
+---
+
+<div class="">
+  <h3>Ubicación</h3>
+
+  <!--
+    Este <div> es donde Leaflet va a "montar" el mapa.
+    OJO: usa un id fijo ("map"). Leaflet lo busca internamente con ese id.
+    Esto funciona bien mientras el componente aparezca UNA sola vez en la página.
+    (Ver nota al final sobre qué pasaría si lo repites.)
+  -->
+  <div id="map" class="h-125"></div>
+
+  <!--
+    🔀 AQUÍ ocurre el cruce servidor → cliente.
+    Como el frontmatter no es visible en el navegador, "empacamos" los datos
+    del servidor dentro de atributos data-* de un elemento HTML normal.
+    Todo lo que va después de "data-" queda accesible como texto plano
+    en el HTML final (visible en "Ver código fuente").
+  -->
+  <location-data
+    data-lat={location.lat}
+    data-lng={location.lng}
+    data-zoom={location.zoom}
+    data-label={location.markers[0].label}
+  ></location-data>
+</div>
+
+<script>
+  // 📦 Este <script> SÍ corre en el navegador (es un script normal, sin
+  // is:inline), por lo que Astro lo procesa: permite import de npm y CSS,
+  // lo bundlea y lo deduplica si el componente se repitiera en la página.
+  //
+  // Leaflet necesita "document"/"window" para funcionar, por eso su import
+  // vive aquí y NO en el frontmatter (que corre en el servidor, donde esas
+  // APIs del navegador no existen).
+  import L from "leaflet";
+  import "leaflet/dist/leaflet.css";
+
+  // 🧩 Definimos un Web Component para "leer" los datos que dejamos en el HTML.
+  // Esta es la razón de ser del elemento <location-data>: es solo un
+  // contenedor de datos, no pinta nada visualmente él mismo.
+  class LocationData extends HTMLElement {
+    // connectedCallback() se ejecuta automáticamente cuando el navegador
+    // "conecta" (monta) el elemento <location-data> en el DOM.
+    // Si hubiera varias instancias de <location-data> en la página,
+    // esto se ejecutaría una vez POR CADA una, sin que tengas que hacer nada extra.
+    connectedCallback() {
+      // 🔑 Aquí "cruzamos la frontera": leemos los data-* que vienen del
+      // servidor a través de "this.dataset". IMPORTANTE: todos llegan
+      // como strings, aunque en el servidor fueran números.
+      const lat = this.dataset.lat;
+      const lng = this.dataset.lng;
+      const zoom = this.dataset.zoom;
+      const label = this.dataset.label;
+
+      // Verificamos que ningún valor venga vacío/undefined antes de usarlos.
+      if (lat && lng && zoom && label) {
+        // El "+" delante de cada variable las convierte de string a number
+        // (+"19.43" === 19.43). Es indispensable porque Leaflet espera
+        // números, no texto.
+        const map = L.map("map").setView([+lat, +lng], +zoom);
+
+        L.tileLayer(
+          "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        ).addTo(map);
+
+        L.marker([+lat, +lng]).addTo(map).bindPopup(label).openPopup();
+      }
+    }
+  }
+
+  // Registramos el Web Component: a partir de aquí, cualquier
+  // <location-data> en el HTML usará esta clase automáticamente.
+  customElements.define("location-data", LocationData);
+</script>

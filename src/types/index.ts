@@ -95,4 +95,30 @@ const MenuItemSchema = BaseWPSchema.pick({
   }),
 });
 
+
+//**Page Contacto */
+
+export const MarkerSchema = z.object({
+  label: z.string(),
+  lat: z.number(),
+  lng: z.number(), 
+}); 
+
+const LocationSchema = z.object({
+  lat: z.number(),
+  lng: z.number(),
+  zoom: z.number(),
+  address: z.string(),
+  markers: z.array(MarkerSchema)
+}); 
+
+export const ContactPageSchema = BaseWPSchema.extend({
+  acf: z
+    .object({
+      subtitle: z.string(),
+    })
+    .catchall(LocationSchema)
+})
 export const MenuItemsSchema = z.array(MenuItemSchema);
+
+export type Location = z.infer<typeof LocationSchema>; 
