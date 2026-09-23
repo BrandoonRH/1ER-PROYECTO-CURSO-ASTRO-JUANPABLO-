@@ -1,0 +1,144 @@
+---
+
+---
+
+<div>
+  <h3 class="text-coffee-900 font-black text-center text-2xl uppercase mb-5">
+    Contacto
+  </h3>
+  <form method="post" class="space-y-3" novalidate>
+    <legend class="text-xl"
+      >Llena todos los campos para enviar un mensaje.</legend
+    >
+    <div class="flex flex-col space-y-3">
+      <label for="name" class="input-label">Nombre:</label>
+      <input
+        id="name"
+        type="text"
+        name="name"
+        placeholder="Tu Nombre"
+        class="input-field"
+      />
+    </div>
+
+    <div class="flex flex-col space-y-3">
+      <label for="email" class="input-label">Email:</label>
+      <input
+        id="email"
+        type="email"
+        name="email"
+        placeholder="Tu Email"
+        class="input-field"
+      />
+    </div>
+
+    <div class="flex flex-col space-y-3">
+      <label for="subject" class="input-label">Asunto:</label>
+      <input
+        id="subject"
+        type="text"
+        name="subject"
+        placeholder="Asunto de Mensaje"
+        class="input-field"
+      />
+    </div>
+    <div class="flex flex-col space-y-3">
+      <label for="message" class="input-label">Contenido:</label>
+      <textarea
+        id="message"
+        name="message"
+        placeholder="Tu Mensaje"
+        class="input-field h-32"></textarea>
+    </div>
+    <input
+      type="submit"
+      value="Enviar"
+      class="bg-coffee-900 w-full p-3 text-white uppercase font-bold cursor-pointer hover:bg-coffee-700 text-2xl"
+    />
+  </form>
+</div>
+
+<script>
+  import { isInputError } from "astro:actions";
+  import { actions } from "astro:actions";
+  import { Notyf } from "notyf";
+  import "notyf/notyf.min.css";
+
+  const notyf = new Notyf({
+    position: { x: "right", y: "top" },
+    duration: 5000,
+    ripple: false,
+    dismissible: true,
+  });
+
+  const form = document.querySelector("form");
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const form = e.target as HTMLFormElement;
+    //¿Que es FormData?
+    const formData = new FormData(form);
+
+    const { data, error } = await actions.contact.sendEmail(formData);
+    const inputErrors = isInputError(error) ? error.issues : [];
+    if (inputErrors) {
+      inputErrors.forEach((error) => {
+        notyf.error(error.message);
+      });
+    }
+
+    if (data?.message && !data?.error) {
+      notyf.success(data?.message || "Todo correcto");
+      form.reset();
+    }
+  });
+
+  /**
+   * 📦 ¿QUÉ ES FormData?
+   * ────────────────────────────────────────────────────────────────
+   * `FormData` es una API nativa del navegador (no es de Astro, ni de
+   * Notyf, ni de ninguna librería externa). Sirve para capturar TODOS
+   * los campos de un <form> de un solo golpe, sin tener que ir campo
+   * por campo con document.querySelector().
+   *
+   * 🧲 ¿CÓMO "ENGANCHA" LOS DATOS?
+   *    `new FormData(form)` recorre el <form> y toma cada input usando
+   *    su atributo `name` como llave (key). Por ejemplo, si tu form
+   *    tiene:
+   *
+   *        <input name="email" value="hola@mail.com" />
+   *        <input name="mensaje" value="¡Hola!" />
+   *
+   *    Internamente equivale a algo como:
+   *
+   *        { email: "hola@mail.com", mensaje: "¡Hola!" }
+   *
+   * 🛠️  MÉTODOS MÁS USADOS
+   *    - formData.get("email")       → obtiene UN valor
+   *    - formData.getAll("archivo")  → obtiene un ARRAY (útil si hay
+   *                                     varios inputs con el mismo name)
+   *    - formData.append("x", "y")   → agrega un campo extra a mano
+   *    - formData.set("x", "y")      → reemplaza el valor de un campo
+   *    - formData.entries()          → recorre todos los pares [key, value]
+   *
+   * 🖼️  ¿POR QUÉ ES IDEAL PARA ARCHIVOS?
+   *    A diferencia de `JSON.stringify()`, FormData SÍ soporta archivos
+   *    (<input type="file">) de forma nativa, siempre que el <form>
+   *    tenga `enctype="multipart/form-data"`.
+   *
+   * 🤝 ¿POR QUÉ COMBINA TAN BIEN CON ASTRO ACTIONS?
+   *    Como esta Action (`actions.contact.sendEmail`) está configurada
+   *    con `accept: 'form'` en el servidor, puedes pasarle el FormData
+   *    DIRECTO —tal cual se ve arriba— sin convertirlo a JSON tú mismo.
+   *    Astro se encarga de parsearlo y de validarlo con Zod automáticamente. 🎉
+   *
+   * ⚠️  OJO: no puedes hacer `console.log(formData)` y esperar ver el
+   *    contenido de inmediato — el navegador lo muestra como un objeto
+   *    "vacío" en apariencia. Para inspeccionarlo de verdad, recórrelo:
+   *
+   *        for (const [key, value] of formData.entries()) {
+   *          console.log(key, value);
+   *        }
+   *
+   * o con JSON.stringify
+   */
+</script>

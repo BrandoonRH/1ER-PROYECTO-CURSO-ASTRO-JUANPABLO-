@@ -1,0 +1,33 @@
+info:
+  name: BrevoTest
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: http://coffeeshop.local/wp-json/contact-form-7/v1/contact-forms/144/feedback
+  body:
+    type: multipart-form
+    data:
+      - name: your-name
+        type: text
+        value: JUan
+      - name: your-email
+        type: text
+        value: correo@correo.com
+      - name: your-subject
+        type: text
+        value: Solicitar REservación
+      - name: your-message
+        type: text
+        value: HOla quiero reservan de café
+      - name: _wpcf7_unit_tag
+        type: text
+        value: wpcf7-123
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

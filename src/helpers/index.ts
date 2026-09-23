@@ -14,3 +14,8 @@ export function formatAmount(amount: number): string {
     currency: "USD",
   }).format(amount);
 }
+
+
+export function nullToEmptyString(arg: unknown){
+  return arg ?? ''
+}

@@ -2,6 +2,7 @@
 import Layout from "@/layouts/Layout.astro";
 import { ContactPageSchema } from "../types/index";
 import LocationMap from "@/components/contact/LocationMap.astro";
+import ContactForm from "@/components/contact/ContactForm.astro";
 
 const url = `${import.meta.env.API_URL}/pages?slug=contacto`;
 const res = await fetch(url);
@@ -20,9 +21,8 @@ if (!data) return null;
     set:html={data.content.rendered}
   />
 
-  <div
-    class="grid  grid-cols-1 lg:grid-cols-2 gap-5"
-  >
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+    <ContactForm />
     <LocationMap location={data.acf.location} />
   </div>
 </Layout>
