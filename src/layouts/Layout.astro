@@ -1,7 +1,9 @@
 ---
+import {ClientRouter, fade, slide } from  'astro:transitions';
 import "@/styles/global.css";
 import Header from "@/components/ui/Header.astro";
 import Footer from "@/components/ui/Footer.astro";
+
 
 interface Props {
   title: string;
@@ -25,12 +27,13 @@ const { title, subtitle, bgImage } = Astro.props;
       href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
       rel="stylesheet"
     />
+    <ClientRouter/>
     <title>Cafetería desde 1939: {title}</title>
   </head>
   <body>
     <Header bgImage={bgImage} subtitle={subtitle} />
     <slot name="before-main-content" />
-    <main class="bg-white p-10 lg:p-20 max-w-7xl mx-auto lg:-mt-20 relative">
+    <main transition:animate={fade({duration: "1s"})} class="bg-white p-10 lg:p-20 max-w-7xl mx-auto lg:-mt-20 relative">
       <h2
         class="text-coffee-900 font-black text-center text-4xl pb-10 uppercase after:coffe-icon"
       >

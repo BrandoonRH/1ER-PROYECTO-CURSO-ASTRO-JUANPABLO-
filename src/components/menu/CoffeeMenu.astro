@@ -39,4 +39,7 @@ const data = MenuItemsSchema.parse(json);
     pswpModule: () => import("photoswipe"),
   });
   lightbox.init();
+  document.addEventListener("astro:after-swap", function () {
+    lightbox.init();
+  });
 </script>
